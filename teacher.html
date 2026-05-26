@@ -145,6 +145,70 @@
     .cell-clip { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     @media (max-width: 400px) { .filter-row { flex-direction: column; } }
+
+    /* 테이블 행 클릭 커서 */
+    tbody tr { cursor: pointer; }
+
+    /* 모달 */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 0;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: white;
+      width: 100%; max-width: 600px;
+      border-radius: 20px 20px 0 0;
+      padding: 24px 22px 32px;
+      max-height: 88vh;
+      overflow-y: auto;
+      animation: slideUp 0.22s ease-out;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .modal-header .name { font-size: 1.2rem; font-weight: 700; color: #222; }
+    .modal-close {
+      width: 32px; height: 32px; border: none; background: #f0f0f0;
+      border-radius: 50%; font-size: 1.1rem; cursor: pointer; color: #666;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s; flex-shrink: 0;
+    }
+    .modal-close:hover { background: #e0e0e0; }
+
+    .modal-meta {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 20px; padding-bottom: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .modal-meta-item {
+      font-size: 0.8rem; color: #888;
+      background: #f7f7f7; border-radius: 6px; padding: 4px 10px;
+    }
+
+    .modal-field { margin-bottom: 16px; }
+    .modal-field .field-label {
+      font-size: 0.78rem; font-weight: 700; color: #aaa;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      margin-bottom: 5px;
+    }
+    .modal-field .field-value {
+      font-size: 0.93rem; color: #333; line-height: 1.6;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .modal-field .field-empty { color: #ccc; font-size: 0.88rem; font-style: italic; }
   </style>
 </head>
 <body>
@@ -263,6 +327,34 @@
   </div>
 
 </div>
+
+<!-- 상세 기록 모달 -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-header">
+      <span class="name" id="modal-name"></span>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-field">
+      <div class="field-label" id="modal-label-today"></div>
+      <div class="field-value" id="modal-today-work"></div>
+    </div>
+    <div class="modal-field">
+      <div class="field-label" id="modal-label-good"></div>
+      <div class="field-value" id="modal-good-points"></div>
+    </div>
+    <div class="modal-field">
+      <div class="field-label" id="modal-label-diff"></div>
+      <div class="field-value" id="modal-difficulty"></div>
+    </div>
+    <div class="modal-field">
+      <div class="field-label" id="modal-label-next"></div>
+      <div class="field-value" id="modal-next-plan"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -494,9 +586,55 @@ function renderRecords(records) {
       <td class="cell-clip" title="${escHtml(r.today_work)}">${escHtml(r.today_work)}</td>
       <td style="white-space:nowrap;font-size:0.76rem;color:#bbb;">${formatDate(r.created_at)}</td>
     `;
+    tr.addEventListener('click', () => openModal(r));
     tbody.appendChild(tr);
   });
 }
+
+// 모달
+const FIELD_LABELS = {
+  '초등': { today:'오늘 무엇을 했나요?', good:'잘 된 것은 무엇인가요?', diff:'힘든 게 있었나요?', next:'다음엔 뭐 할 건가요?' },
+  '중등': { today:'오늘 활동 내용',      good:'잘 된 점',              diff:'어려운 점',      next:'다음 활동 계획' },
+  '고등': { today:'수행 내용',           good:'성과 및 결과',           diff:'문제점 및 한계', next:'후속 계획 및 개선방향' },
+};
+
+function openModal(r) {
+  const labels = FIELD_LABELS[r.school_level] || FIELD_LABELS['초등'];
+
+  document.getElementById('modal-name').innerHTML =
+    `${escHtml(r.student_name)} ${stageBadge(r.stage, r.school_level)}`;
+
+  document.getElementById('modal-meta').innerHTML = `
+    <span class="modal-meta-item">${escHtml(r.project_name)}</span>
+    <span class="modal-meta-item">${escHtml(r.school_level)}학교</span>
+    <span class="modal-meta-item">${formatDate(r.created_at)}</span>
+  `;
+
+  function setField(labelId, valueId, label, value) {
+    document.getElementById(labelId).textContent = label;
+    const el = document.getElementById(valueId);
+    if (value) { el.textContent = value; el.className = 'field-value'; }
+    else        { el.textContent = '(없음)'; el.className = 'field-value field-empty'; }
+  }
+  setField('modal-label-today', 'modal-today-work',  labels.today, r.today_work);
+  setField('modal-label-good',  'modal-good-points', labels.good,  r.good_points);
+  setField('modal-label-diff',  'modal-difficulty',  labels.diff,  r.difficulty);
+  setField('modal-label-next',  'modal-next-plan',   labels.next,  r.next_plan);
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 function renderStats(records) {
   let done = 0, progress = 0, start = 0;
