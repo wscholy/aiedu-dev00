@@ -1,0 +1,6 @@
+# Supabase 인증 정보 — 절대 GitHub에 올리지 않는다
+config.js
+
+# OS 파일
+.DS_Store
+Thumbs.db
