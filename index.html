@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Supabase anon key는 공개용 키 — RLS 정책으로 보호됨
     const SUPABASE_URL = 'https://hdbeluvnwcjylmayljlp.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkYmVsdXZud2NqeWxtYXlsamxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NjgxOTQsImV4cCI6MjA5NTM0NDE5NH0.wDVKFd6PkaCQp_7Qi1435gow-meS32l0KKPrDefhqCQ';
   </script>
@@ -22,33 +21,18 @@
       justify-content: center;
       padding: 16px;
     }
+    .container { width: 100%; max-width: 600px; }
 
-    .container {
-      width: 100%;
-      max-width: 600px;
-    }
-
-    /* 화면 전환 */
     .screen { display: none; }
     .screen.active { display: block; }
 
-    /* 헤더 */
     header {
       text-align: center;
-      padding: 24px 0 20px;
+      padding: 28px 0 20px;
     }
-    header h1 {
-      font-size: 1.4rem;
-      color: #2e7d32;
-      font-weight: 700;
-    }
-    header .subtitle {
-      color: #888;
-      font-size: 0.88rem;
-      margin-top: 4px;
-    }
+    header h1 { font-size: 1.4rem; color: #2e7d32; font-weight: 700; }
+    header .subtitle { color: #999; font-size: 0.86rem; margin-top: 4px; }
 
-    /* 카드 */
     .card {
       background: white;
       border-radius: 14px;
@@ -57,15 +41,17 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.07);
     }
 
-    /* 폼 */
     label {
       display: block;
-      font-size: 0.88rem;
+      font-size: 0.87rem;
       font-weight: 500;
       color: #444;
       margin-bottom: 6px;
     }
-    input[type="text"], textarea, select {
+    input[type="text"],
+    input[type="password"],
+    textarea,
+    select {
       width: 100%;
       border: 1.5px solid #ddd;
       border-radius: 8px;
@@ -77,13 +63,10 @@
       transition: border-color 0.2s;
       background: white;
     }
-    input[type="text"]:focus,
-    textarea:focus,
-    select:focus { border-color: #4caf50; }
-    textarea { resize: vertical; min-height: 80px; }
+    input:focus, textarea:focus, select:focus { border-color: #4caf50; }
+    textarea { resize: vertical; min-height: 78px; }
     .form-group { margin-bottom: 16px; }
 
-    /* 버튼 */
     .btn {
       display: block;
       width: 100%;
@@ -91,34 +74,25 @@
       border: none;
       border-radius: 9px;
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.97rem;
+      font-size: 0.96rem;
       font-weight: 500;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.2s;
       text-align: center;
     }
     .btn + .btn { margin-top: 10px; }
     .btn-primary { background: #4caf50; color: white; }
     .btn-primary:hover { background: #388e3c; }
     .btn-primary:disabled { background: #b0bfb0; cursor: not-allowed; }
-    .btn-secondary {
-      background: white;
-      color: #4caf50;
-      border: 1.5px solid #4caf50;
-    }
+    .btn-secondary { background: white; color: #4caf50; border: 1.5px solid #4caf50; }
     .btn-secondary:hover { background: #f1f8e9; }
-    .btn-outline {
-      background: white;
-      color: #777;
-      border: 1.5px solid #ddd;
-    }
+    .btn-outline { background: white; color: #888; border: 1.5px solid #ddd; }
     .btn-outline:hover { background: #f5f5f5; }
+    .btn-danger { background: white; color: #e53935; border: 1.5px solid #ef9a9a; }
+    .btn-danger:hover { background: #ffebee; }
 
-    /* 학교급 선택 버튼 그룹 */
-    .school-btn-group {
-      display: flex;
-      gap: 10px;
-    }
+    /* 학교급 버튼 그룹 */
+    .school-btn-group { display: flex; gap: 10px; }
     .school-btn {
       flex: 1;
       padding: 10px;
@@ -129,7 +103,7 @@
       font-size: 0.93rem;
       cursor: pointer;
       transition: all 0.2s;
-      color: #555;
+      color: #666;
     }
     .school-btn.active {
       border-color: #4caf50;
@@ -143,28 +117,84 @@
       padding: 11px 14px;
       border-radius: 8px;
       margin-bottom: 14px;
-      font-size: 0.88rem;
+      font-size: 0.87rem;
       display: none;
     }
     .message.show { display: block; }
-    .message.error { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+    .message.error   { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
     .message.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .message.info    { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
 
-    /* 로딩 스피너 */
+    /* 스피너 */
     .spinner {
       display: inline-block;
-      width: 16px;
-      height: 16px;
+      width: 15px; height: 15px;
       border: 2px solid rgba(255,255,255,0.4);
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       vertical-align: middle;
-      margin-right: 6px;
+      margin-right: 5px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* 통계 그리드 */
+    /* ── 홈 화면 ── */
+    .project-card {
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border: 2px solid #a5d6a7;
+      border-radius: 16px;
+      padding: 28px 22px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      text-align: center;
+    }
+    .project-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(76,175,80,0.2); }
+    .project-card .card-icon { font-size: 2.4rem; margin-bottom: 10px; }
+    .project-card .card-name { font-size: 1.3rem; font-weight: 700; color: #1b5e20; margin-bottom: 4px; }
+    .project-card .card-level { font-size: 0.85rem; color: #4caf50; }
+    .project-card .card-hint { font-size: 0.8rem; color: #81c784; margin-top: 10px; }
+
+    .no-project {
+      border: 2px dashed #ccc;
+      border-radius: 16px;
+      padding: 36px 22px;
+      text-align: center;
+      color: #bbb;
+      margin-bottom: 14px;
+    }
+    .no-project p { font-size: 0.9rem; margin-top: 6px; }
+
+    .teacher-btn-wrap { margin-top: 8px; }
+
+    /* ── 교사 화면 탭 ── */
+    .tab-bar {
+      display: flex;
+      background: white;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 14px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #999;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active { background: #4caf50; color: white; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── 통계 ── */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -178,19 +208,10 @@
       text-align: center;
       box-shadow: 0 1px 5px rgba(0,0,0,0.07);
     }
-    .stat-card .num {
-      font-size: 1.9rem;
-      font-weight: 700;
-      color: #2e7d32;
-      line-height: 1;
-    }
-    .stat-card .lbl {
-      font-size: 0.77rem;
-      color: #999;
-      margin-top: 4px;
-    }
+    .stat-card .num { font-size: 1.9rem; font-weight: 700; color: #2e7d32; line-height: 1; }
+    .stat-card .lbl { font-size: 0.77rem; color: #aaa; margin-top: 4px; }
 
-    /* 단계 배지 */
+    /* ── 배지 ── */
     .badge {
       display: inline-block;
       padding: 3px 9px;
@@ -204,18 +225,13 @@
     .badge-almost   { background: #fff3e0; color: #e65100; }
     .badge-done     { background: #e8f5e9; color: #2e7d32; }
 
-    /* 필터 행 */
-    .filter-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .filter-row select,
-    .filter-row input { flex: 1; }
+    /* ── 필터 ── */
+    .filter-row { display: flex; gap: 10px; margin-bottom: 14px; }
+    .filter-row select, .filter-row input { flex: 1; }
 
-    /* 테이블 */
+    /* ── 테이블 ── */
     .table-wrapper { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
     th {
       background: #f5f5f5;
       padding: 9px 8px;
@@ -233,33 +249,21 @@
     }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafafa; }
-    .cell-truncate {
-      max-width: 130px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    .cell-clip { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* 이전 기록 */
+    /* ── 이전 기록 ── */
     .prev-record-item {
       background: #f9f9f9;
       border-radius: 8px;
       padding: 11px 13px;
       margin-bottom: 8px;
       border-left: 3px solid #4caf50;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
     }
-    .prev-record-item .date {
-      color: #bbb;
-      font-size: 0.77rem;
-      margin-bottom: 3px;
-    }
-    .section-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #444;
-      margin-bottom: 12px;
-    }
+    .prev-record-item .date { color: #ccc; font-size: 0.76rem; margin-bottom: 3px; }
+    .section-title { font-size: 0.93rem; font-weight: 700; color: #444; margin-bottom: 12px; }
+
+    .divider { border: none; border-top: 1px solid #eee; margin: 20px 0; }
 
     @media (max-width: 400px) {
       .filter-row { flex-direction: column; }
@@ -270,34 +274,158 @@
 <div class="container">
 
   <!-- =====================================================
-       화면 1: 설정 (교사용)
+       화면 1: 홈
   ===================================================== -->
-  <div id="screen-settings" class="screen active">
+  <div id="screen-home" class="screen active">
     <header>
       <h1>프로젝트 진행 기록</h1>
-      <p class="subtitle">교사 설정 화면</p>
+      <p class="subtitle">프로젝트를 선택해서 기록을 시작하세요</p>
     </header>
-    <div class="card">
-      <div id="msg-settings" class="message error"></div>
-      <div class="form-group">
-        <label for="project-name">프로젝트 이름</label>
-        <input type="text" id="project-name" placeholder="예: 미래 직업 탐구 프로젝트">
-      </div>
-      <div class="form-group">
-        <label>학교급 선택</label>
-        <div class="school-btn-group">
-          <button class="school-btn active" data-level="초등">초등</button>
-          <button class="school-btn" data-level="중등">중등</button>
-          <button class="school-btn" data-level="고등">고등</button>
-        </div>
-      </div>
-      <button class="btn btn-primary" id="btn-start">학생 입력 화면으로 시작</button>
-      <button class="btn btn-secondary" id="btn-goto-view">전체 기록 조회</button>
+
+    <!-- 프로젝트 카드 (설정된 경우) -->
+    <div id="home-project-card" class="project-card" style="display:none;" onclick="goStudentFromHome()">
+      <div class="card-icon">📋</div>
+      <div class="card-name" id="home-project-name"></div>
+      <div class="card-level" id="home-project-level"></div>
+      <div class="card-hint">탭하여 기록 입력하기 →</div>
+    </div>
+
+    <!-- 프로젝트 미설정 안내 -->
+    <div id="home-no-project" class="no-project" style="display:none;">
+      <div style="font-size:2rem;">📂</div>
+      <p>아직 설정된 프로젝트가 없습니다.<br>교사 화면에서 프로젝트를 설정해주세요.</p>
+    </div>
+
+    <div class="teacher-btn-wrap">
+      <button class="btn btn-outline" id="btn-home-teacher">교사 화면</button>
     </div>
   </div>
 
   <!-- =====================================================
-       화면 2: 학생 입력
+       화면 2: 교사 인증
+  ===================================================== -->
+  <div id="screen-auth" class="screen">
+    <header>
+      <h1>교사 화면</h1>
+      <p class="subtitle" id="auth-subtitle"></p>
+    </header>
+    <div class="card">
+      <div id="msg-auth" class="message"></div>
+
+      <!-- 비밀번호 설정 (최초) -->
+      <div id="auth-set-form">
+        <div class="form-group">
+          <label for="pw-new">새 비밀번호 설정</label>
+          <input type="password" id="pw-new" placeholder="비밀번호 입력">
+        </div>
+        <div class="form-group">
+          <label for="pw-new-confirm">비밀번호 확인</label>
+          <input type="password" id="pw-new-confirm" placeholder="한 번 더 입력">
+        </div>
+        <button class="btn btn-primary" id="btn-set-pw">비밀번호 설정</button>
+      </div>
+
+      <!-- 비밀번호 입력 (기존) -->
+      <div id="auth-enter-form" style="display:none;">
+        <div class="form-group">
+          <label for="pw-enter">비밀번호</label>
+          <input type="password" id="pw-enter" placeholder="비밀번호 입력">
+        </div>
+        <button class="btn btn-primary" id="btn-enter-pw">확인</button>
+      </div>
+
+      <button class="btn btn-outline" id="btn-auth-back">← 돌아가기</button>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       화면 3: 교사 화면 (설정 + 조회)
+  ===================================================== -->
+  <div id="screen-teacher" class="screen">
+    <header>
+      <h1>교사 화면</h1>
+    </header>
+
+    <!-- 탭 -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="tab-settings">프로젝트 설정</button>
+      <button class="tab-btn" data-tab="tab-records">전체 기록 조회</button>
+    </div>
+
+    <!-- 탭 1: 프로젝트 설정 -->
+    <div id="tab-settings" class="tab-panel active">
+      <div class="card">
+        <div id="msg-settings" class="message"></div>
+        <div class="form-group">
+          <label for="project-name">프로젝트 이름</label>
+          <input type="text" id="project-name" placeholder="예: 미래 직업 탐구 프로젝트">
+        </div>
+        <div class="form-group">
+          <label>학교급</label>
+          <div class="school-btn-group">
+            <button class="school-btn active" data-level="초등">초등</button>
+            <button class="school-btn" data-level="중등">중등</button>
+            <button class="school-btn" data-level="고등">고등</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btn-save-settings">저장</button>
+        <hr class="divider">
+        <button class="btn btn-danger" id="btn-change-pw">비밀번호 변경</button>
+        <button class="btn btn-outline" id="btn-teacher-logout">로그아웃</button>
+      </div>
+    </div>
+
+    <!-- 탭 2: 전체 기록 조회 -->
+    <div id="tab-records" class="tab-panel">
+      <!-- 통계 -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="num" id="stat-total">0</div>
+          <div class="lbl">총 제출</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="stat-done">0</div>
+          <div class="lbl">완료</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="stat-progress">0</div>
+          <div class="lbl">진행 중</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="stat-start">0</div>
+          <div class="lbl">시작/계획</div>
+        </div>
+      </div>
+
+      <!-- 필터 -->
+      <div class="filter-row">
+        <select id="filter-stage"><option value="">전체 단계</option></select>
+        <input type="text" id="filter-name" placeholder="이름 검색">
+      </div>
+
+      <div class="card">
+        <div id="msg-view" class="message"></div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>이름</th>
+                <th>단계</th>
+                <th>오늘 한 것</th>
+                <th>어려운 점</th>
+                <th>시간</th>
+              </tr>
+            </thead>
+            <tbody id="records-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <button class="btn btn-secondary" id="btn-refresh">새로고침</button>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       화면 4: 학생 입력
   ===================================================== -->
   <div id="screen-student" class="screen">
     <header>
@@ -333,73 +461,14 @@
         <textarea id="student-next-plan" placeholder="내용을 입력하세요"></textarea>
       </div>
       <button class="btn btn-primary" id="btn-submit">제출하기</button>
-      <button class="btn btn-outline" id="btn-back-settings">← 설정으로 돌아가기</button>
+      <button class="btn btn-outline" id="btn-student-back">← 돌아가기</button>
     </div>
 
-    <!-- 학생 본인 이전 기록 (v0.2.0) -->
+    <!-- 이전 기록 -->
     <div class="card" id="prev-records-section" style="display:none;">
       <p class="section-title">내 이전 기록</p>
       <div id="prev-records-list"></div>
     </div>
-  </div>
-
-  <!-- =====================================================
-       화면 3: 전체 조회 (교사용)
-  ===================================================== -->
-  <div id="screen-view" class="screen">
-    <header>
-      <h1>전체 기록 조회</h1>
-      <p class="subtitle" id="view-subtitle"></p>
-    </header>
-
-    <!-- 단계별 통계 -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="num" id="stat-total">0</div>
-        <div class="lbl">총 제출 인원</div>
-      </div>
-      <div class="stat-card">
-        <div class="num" id="stat-done">0</div>
-        <div class="lbl">완료</div>
-      </div>
-      <div class="stat-card">
-        <div class="num" id="stat-progress">0</div>
-        <div class="lbl">진행 중</div>
-      </div>
-      <div class="stat-card">
-        <div class="num" id="stat-start">0</div>
-        <div class="lbl">시작/계획</div>
-      </div>
-    </div>
-
-    <!-- 필터 -->
-    <div class="filter-row">
-      <select id="filter-stage">
-        <option value="">전체 단계</option>
-      </select>
-      <input type="text" id="filter-name" placeholder="이름 검색">
-    </div>
-
-    <div class="card">
-      <div id="msg-view" class="message"></div>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>이름</th>
-              <th>단계</th>
-              <th>오늘 한 것</th>
-              <th>어려운 점</th>
-              <th>제출 시간</th>
-            </tr>
-          </thead>
-          <tbody id="records-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <button class="btn btn-secondary" id="btn-refresh">새로고침</button>
-    <button class="btn btn-outline" id="btn-back-from-view">← 설정으로 돌아가기</button>
   </div>
 
 </div><!-- /container -->
@@ -408,157 +477,321 @@
 // =====================================================
 // Supabase 초기화
 // =====================================================
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =====================================================
-// 학교급별 레이블 및 단계 설정
+// 학교급별 설정
 // =====================================================
 const LEVEL_CONFIG = {
   '초등': {
     labels: {
-      stage:       '지금 어디까지 했나요?',
-      today_work:  '오늘 무엇을 했나요?',
-      good_points: '잘 된 것은 무엇인가요?',
-      difficulty:  '힘든 게 있었나요?',
-      next_plan:   '다음엔 뭐 할 건가요?',
+      stage: '지금 어디까지 했나요?', today_work: '오늘 무엇을 했나요?',
+      good_points: '잘 된 것은 무엇인가요?', difficulty: '힘든 게 있었나요?',
+      next_plan: '다음엔 뭐 할 건가요?',
     },
     stages: ['시작했어요', '하는 중이에요', '거의 다 됐어요', '완성했어요'],
   },
   '중등': {
     labels: {
-      stage:       '현재 진행 단계',
-      today_work:  '오늘 활동 내용',
-      good_points: '잘 된 점',
-      difficulty:  '어려운 점',
-      next_plan:   '다음 활동 계획',
+      stage: '현재 진행 단계', today_work: '오늘 활동 내용',
+      good_points: '잘 된 점', difficulty: '어려운 점',
+      next_plan: '다음 활동 계획',
     },
     stages: ['계획 수립', '진행 중', '마무리 단계', '완료'],
   },
   '고등': {
     labels: {
-      stage:       '진행 단계',
-      today_work:  '수행 내용',
-      good_points: '성과 및 결과',
-      difficulty:  '문제점 및 한계',
-      next_plan:   '후속 계획 및 개선방향',
+      stage: '진행 단계', today_work: '수행 내용',
+      good_points: '성과 및 결과', difficulty: '문제점 및 한계',
+      next_plan: '후속 계획 및 개선방향',
     },
     stages: ['기획', '실행', '검토', '완성'],
   },
 };
-
-// 단계 → 배지 색상 매핑 (인덱스 0~3)
 const STAGE_BADGE = ['badge-start', 'badge-progress', 'badge-almost', 'badge-done'];
 
 // =====================================================
-// 앱 전역 상태
+// 앱 상태 (localStorage 기반)
 // =====================================================
-const state = {
-  projectName: '',
-  schoolLevel: '초등',
-  allRecords: [],
-};
+const LS_PW   = 'proj_teacher_pw';
+const LS_PROJ = 'proj_project_name';
+const LS_LVL  = 'proj_school_level';
+
+function getSavedProject() {
+  return {
+    name:  localStorage.getItem(LS_PROJ) || '',
+    level: localStorage.getItem(LS_LVL)  || '초등',
+  };
+}
 
 // =====================================================
-// 유틸 함수
+// 유틸
 // =====================================================
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
 }
-
-function showMsg(elId, text, type = 'error') {
-  const el = document.getElementById(elId);
+function showMsg(id, text, type = 'error') {
+  const el = document.getElementById(id);
   el.textContent = text;
   el.className = `message ${type} show`;
 }
-
-function hideMsg(elId) {
-  document.getElementById(elId).className = 'message';
-}
-
+function hideMsg(id) { document.getElementById(id).className = 'message'; }
 function formatDate(iso) {
   if (!iso) return '';
   const d = new Date(iso);
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  const hh = String(d.getHours()).padStart(2, '0');
-  const mi = String(d.getMinutes()).padStart(2, '0');
-  return `${mm}/${dd} ${hh}:${mi}`;
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
 }
-
-// 단계 이름 → 배지 HTML 반환
-function stageBadge(stage) {
+function escHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function stageBadge(stage, level) {
   if (!stage) return '';
-  const cfg = LEVEL_CONFIG[state.schoolLevel] || LEVEL_CONFIG['초등'];
+  const cfg = LEVEL_CONFIG[level] || LEVEL_CONFIG['초등'];
   const idx = cfg.stages.indexOf(stage);
   const cls = idx >= 0 ? STAGE_BADGE[idx] : 'badge-start';
-  return `<span class="badge ${cls}">${escapeHtml(stage)}</span>`;
-}
-
-function escapeHtml(str) {
-  if (!str) return '';
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return `<span class="badge ${cls}">${escHtml(stage)}</span>`;
 }
 
 // =====================================================
-// 화면 1: 설정
+// 화면 1: 홈
 // =====================================================
+function renderHome() {
+  const { name, level } = getSavedProject();
+  const card    = document.getElementById('home-project-card');
+  const noProj  = document.getElementById('home-no-project');
+
+  if (name) {
+    card.style.display = 'block';
+    noProj.style.display = 'none';
+    document.getElementById('home-project-name').textContent  = name;
+    document.getElementById('home-project-level').textContent = level + '학교';
+  } else {
+    card.style.display = 'none';
+    noProj.style.display = 'block';
+  }
+}
+
+function goStudentFromHome() {
+  const { name } = getSavedProject();
+  if (!name) return;
+  setupStudentScreen();
+  showScreen('screen-student');
+}
+
+document.getElementById('btn-home-teacher').addEventListener('click', () => {
+  openAuthScreen();
+});
+
+// =====================================================
+// 화면 2: 교사 인증
+// =====================================================
+function openAuthScreen() {
+  hideMsg('msg-auth');
+  document.getElementById('pw-new').value         = '';
+  document.getElementById('pw-new-confirm').value = '';
+  document.getElementById('pw-enter').value       = '';
+
+  const hasPw = !!localStorage.getItem(LS_PW);
+  document.getElementById('auth-set-form').style.display   = hasPw ? 'none'  : 'block';
+  document.getElementById('auth-enter-form').style.display = hasPw ? 'block' : 'none';
+  document.getElementById('auth-subtitle').textContent =
+    hasPw ? '비밀번호를 입력하세요' : '처음 사용 시 비밀번호를 설정해주세요';
+  showScreen('screen-auth');
+}
+
+// 비밀번호 설정 (최초)
+document.getElementById('btn-set-pw').addEventListener('click', () => {
+  const pw1 = document.getElementById('pw-new').value;
+  const pw2 = document.getElementById('pw-new-confirm').value;
+  if (!pw1) { showMsg('msg-auth', '비밀번호를 입력해주세요.'); return; }
+  if (pw1 !== pw2) { showMsg('msg-auth', '비밀번호가 일치하지 않습니다.'); return; }
+  localStorage.setItem(LS_PW, pw1);
+  openTeacherScreen();
+});
+
+// 비밀번호 확인
+document.getElementById('btn-enter-pw').addEventListener('click', () => {
+  const pw = document.getElementById('pw-enter').value;
+  if (pw === localStorage.getItem(LS_PW)) {
+    openTeacherScreen();
+  } else {
+    showMsg('msg-auth', '비밀번호가 틀렸습니다.');
+  }
+});
+document.getElementById('pw-enter').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('btn-enter-pw').click();
+});
+
+document.getElementById('btn-auth-back').addEventListener('click', () => {
+  renderHome();
+  showScreen('screen-home');
+});
+
+// =====================================================
+// 화면 3: 교사 화면
+// =====================================================
+function openTeacherScreen() {
+  const { name, level } = getSavedProject();
+
+  // 설정 탭 초기값
+  document.getElementById('project-name').value = name;
+  document.querySelectorAll('.school-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.level === level);
+  });
+  hideMsg('msg-settings');
+
+  // 조회 탭 필터 옵션
+  const cfg = LEVEL_CONFIG[level];
+  const sel = document.getElementById('filter-stage');
+  sel.innerHTML = '<option value="">전체 단계</option>';
+  cfg.stages.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s; opt.textContent = s;
+    sel.appendChild(opt);
+  });
+  document.getElementById('filter-name').value = '';
+
+  // 첫 탭 활성화
+  switchTab('tab-settings');
+  showScreen('screen-teacher');
+}
+
+// 탭 전환
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.tab === tabId));
+  document.querySelectorAll('.tab-panel').forEach(p =>
+    p.classList.toggle('active', p.id === tabId));
+  if (tabId === 'tab-records') loadAllRecords();
+}
+
+// 학교급 버튼
 document.querySelectorAll('.school-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.school-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    state.schoolLevel = btn.dataset.level;
   });
 });
 
-document.getElementById('btn-start').addEventListener('click', () => {
-  const name = document.getElementById('project-name').value.trim();
-  if (!name) {
-    showMsg('msg-settings', '프로젝트 이름을 입력해주세요.');
+// 프로젝트 저장
+document.getElementById('btn-save-settings').addEventListener('click', () => {
+  const name  = document.getElementById('project-name').value.trim();
+  const level = document.querySelector('.school-btn.active').dataset.level;
+  if (!name) { showMsg('msg-settings', '프로젝트 이름을 입력해주세요.'); return; }
+  localStorage.setItem(LS_PROJ, name);
+  localStorage.setItem(LS_LVL, level);
+  showMsg('msg-settings', '저장되었습니다.', 'success');
+});
+
+// 비밀번호 변경
+document.getElementById('btn-change-pw').addEventListener('click', () => {
+  localStorage.removeItem(LS_PW);
+  openAuthScreen();
+});
+
+// 로그아웃
+document.getElementById('btn-teacher-logout').addEventListener('click', () => {
+  renderHome();
+  showScreen('screen-home');
+});
+
+// ── 전체 기록 조회 ──
+let allRecords = [];
+
+async function loadAllRecords() {
+  hideMsg('msg-view');
+  const { name, level } = getSavedProject();
+  try {
+    let query = db.from('project_records').select('*').order('created_at', { ascending: false });
+    if (name) query = query.eq('project_name', name);
+    const { data, error } = await query;
+    if (error) throw error;
+    allRecords = data || [];
+    renderRecords(allRecords, level);
+    renderStats(allRecords, level);
+  } catch (e) {
+    console.error('기록 조회 실패:', e);
+    showMsg('msg-view', 'Supabase 연결에 실패했습니다.', 'error');
+  }
+}
+
+function renderRecords(records, level) {
+  const tbody = document.getElementById('records-tbody');
+  tbody.innerHTML = '';
+  if (!records.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#ccc;padding:28px;">기록이 없습니다.</td></tr>';
     return;
   }
-  hideMsg('msg-settings');
-  state.projectName = name;
-  setupStudentScreen();
-  showScreen('screen-student');
-});
+  records.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="white-space:nowrap;">${escHtml(r.student_name)}</td>
+      <td>${stageBadge(r.stage, level || r.school_level)}</td>
+      <td class="cell-clip" title="${escHtml(r.today_work)}">${escHtml(r.today_work)}</td>
+      <td class="cell-clip" title="${escHtml(r.difficulty)}">${escHtml(r.difficulty)}</td>
+      <td style="white-space:nowrap;font-size:0.76rem;color:#bbb;">${formatDate(r.created_at)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
-document.getElementById('btn-goto-view').addEventListener('click', () => {
-  state.projectName = document.getElementById('project-name').value.trim();
-  state.schoolLevel = document.querySelector('.school-btn.active').dataset.level;
-  setupViewScreen();
-  showScreen('screen-view');
-});
+function renderStats(records, level) {
+  const cfg = LEVEL_CONFIG[level] || LEVEL_CONFIG['초등'];
+  const counts = [0, 0, 0, 0];
+  records.forEach(r => {
+    const idx = cfg.stages.indexOf(r.stage);
+    if (idx >= 0) counts[idx]++;
+  });
+  document.getElementById('stat-total').textContent    = records.length;
+  document.getElementById('stat-done').textContent     = counts[3];
+  document.getElementById('stat-progress').textContent = counts[1] + counts[2];
+  document.getElementById('stat-start').textContent    = counts[0];
+}
+
+function applyFilters() {
+  const { level } = getSavedProject();
+  const stage = document.getElementById('filter-stage').value;
+  const name  = document.getElementById('filter-name').value.trim().toLowerCase();
+  let f = allRecords;
+  if (stage) f = f.filter(r => r.stage === stage);
+  if (name)  f = f.filter(r => r.student_name && r.student_name.toLowerCase().includes(name));
+  renderRecords(f, level);
+}
+
+document.getElementById('filter-stage').addEventListener('change', applyFilters);
+document.getElementById('filter-name').addEventListener('input', applyFilters);
+document.getElementById('btn-refresh').addEventListener('click', loadAllRecords);
 
 // =====================================================
-// 화면 2: 학생 입력
+// 화면 4: 학생 입력
 // =====================================================
 function setupStudentScreen() {
-  const cfg = LEVEL_CONFIG[state.schoolLevel];
+  const { name, level } = getSavedProject();
+  const cfg = LEVEL_CONFIG[level];
 
-  // 헤더
-  document.getElementById('student-title').textContent = state.projectName || '프로젝트 진행 기록';
-  document.getElementById('student-subtitle').textContent = `${state.schoolLevel}학교`;
+  document.getElementById('student-title').textContent    = name || '프로젝트 진행 기록';
+  document.getElementById('student-subtitle').textContent = level + '학교';
 
-  // 레이블 교체
   document.getElementById('label-stage').textContent       = cfg.labels.stage;
   document.getElementById('label-today-work').textContent  = cfg.labels.today_work;
   document.getElementById('label-good-points').textContent = cfg.labels.good_points;
   document.getElementById('label-difficulty').textContent  = cfg.labels.difficulty;
   document.getElementById('label-next-plan').textContent   = cfg.labels.next_plan;
 
-  // 진행 단계 옵션 재구성
   const sel = document.getElementById('student-stage');
   sel.innerHTML = '<option value="">-- 선택해주세요 --</option>';
   cfg.stages.forEach(s => {
     const opt = document.createElement('option');
-    opt.value = s;
-    opt.textContent = s;
+    opt.value = s; opt.textContent = s;
     sel.appendChild(opt);
   });
 
-  // 폼 초기화
   ['student-name','student-today-work','student-good-points','student-difficulty','student-next-plan']
     .forEach(id => { document.getElementById(id).value = ''; });
   document.getElementById('student-stage').value = '';
@@ -566,58 +799,45 @@ function setupStudentScreen() {
   hideMsg('msg-student');
 }
 
-// 이름 입력 후 포커스 아웃 시 이전 기록 조회
+// 이름 입력 후 이전 기록 조회
 document.getElementById('student-name').addEventListener('blur', async () => {
-  const name = document.getElementById('student-name').value.trim();
-  if (!name) return;
-  await loadPrevRecords(name);
-});
-
-async function loadPrevRecords(name) {
+  const sName = document.getElementById('student-name').value.trim();
+  if (!sName) return;
+  const { name } = getSavedProject();
   try {
-    const { data, error } = await supabaseClient
-      .from('project_records')
+    const { data, error } = await db.from('project_records')
       .select('created_at, stage, today_work')
-      .eq('student_name', name)
-      .eq('project_name', state.projectName)
+      .eq('student_name', sName)
+      .eq('project_name', name)
       .order('created_at', { ascending: false })
       .limit(3);
-
     if (error) throw error;
-    if (!data || data.length === 0) {
-      document.getElementById('prev-records-section').style.display = 'none';
-      return;
-    }
-
+    if (!data || !data.length) { document.getElementById('prev-records-section').style.display = 'none'; return; }
     const list = document.getElementById('prev-records-list');
     list.innerHTML = '';
     data.forEach(r => {
       const div = document.createElement('div');
       div.className = 'prev-record-item';
-      div.innerHTML = `
-        <div class="date">${formatDate(r.created_at)}</div>
-        <div><strong>${escapeHtml(r.stage)}</strong> — ${escapeHtml(r.today_work)}</div>
-      `;
+      div.innerHTML = `<div class="date">${formatDate(r.created_at)}</div>
+        <div><strong>${escHtml(r.stage)}</strong> — ${escHtml(r.today_work)}</div>`;
       list.appendChild(div);
     });
     document.getElementById('prev-records-section').style.display = 'block';
-  } catch (e) {
-    console.error('이전 기록 조회 실패:', e);
-  }
-}
+  } catch (e) { console.error('이전 기록 조회 실패:', e); }
+});
 
 // 제출
 document.getElementById('btn-submit').addEventListener('click', async () => {
-  const studentName = document.getElementById('student-name').value.trim();
-  const stage       = document.getElementById('student-stage').value;
-  const todayWork   = document.getElementById('student-today-work').value.trim();
-  const goodPoints  = document.getElementById('student-good-points').value.trim();
-  const difficulty  = document.getElementById('student-difficulty').value.trim();
-  const nextPlan    = document.getElementById('student-next-plan').value.trim();
+  const { name, level } = getSavedProject();
+  const sName     = document.getElementById('student-name').value.trim();
+  const stage     = document.getElementById('student-stage').value;
+  const todayWork = document.getElementById('student-today-work').value.trim();
+  const goodPts   = document.getElementById('student-good-points').value.trim();
+  const diff      = document.getElementById('student-difficulty').value.trim();
+  const nextPlan  = document.getElementById('student-next-plan').value.trim();
 
-  // 필수 항목 검증 (이름, 단계, 오늘 한 것)
-  if (!studentName || !stage || !todayWork) {
-    showMsg('msg-student', '이름, 진행 단계, 오늘 한 것은 필수 입력 항목입니다.', 'error');
+  if (!sName || !stage || !todayWork) {
+    showMsg('msg-student', '이름, 진행 단계, 오늘 한 것은 필수 항목입니다.', 'error');
     return;
   }
 
@@ -627,150 +847,37 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   hideMsg('msg-student');
 
   try {
-    const { error } = await supabaseClient.from('project_records').insert([{
-      project_name: state.projectName,
-      school_level: state.schoolLevel,
-      student_name: studentName,
-      stage:        stage,
-      today_work:   todayWork,
-      good_points:  goodPoints,
-      difficulty:   difficulty,
-      next_plan:    nextPlan,
+    const { error } = await db.from('project_records').insert([{
+      project_name: name, school_level: level,
+      student_name: sName, stage,
+      today_work: todayWork, good_points: goodPts,
+      difficulty: diff, next_plan: nextPlan,
     }]);
-
     if (error) throw error;
-
     showMsg('msg-student', '제출 완료! 기록이 저장되었습니다.', 'success');
-
-    // 내용 초기화 (이름은 유지)
     document.getElementById('student-stage').value = '';
     ['student-today-work','student-good-points','student-difficulty','student-next-plan']
       .forEach(id => { document.getElementById(id).value = ''; });
-
     // 이전 기록 갱신
-    await loadPrevRecords(studentName);
-
+    document.getElementById('student-name').dispatchEvent(new Event('blur'));
   } catch (e) {
     console.error('제출 실패:', e);
-    showMsg('msg-student', 'Supabase 연결에 실패했습니다. config.js의 URL/Key를 확인해주세요.', 'error');
+    showMsg('msg-student', 'Supabase 연결에 실패했습니다.', 'error');
   } finally {
     btn.disabled = false;
     btn.textContent = '제출하기';
   }
 });
 
-document.getElementById('btn-back-settings').addEventListener('click', () => {
-  showScreen('screen-settings');
+document.getElementById('btn-student-back').addEventListener('click', () => {
+  renderHome();
+  showScreen('screen-home');
 });
 
 // =====================================================
-// 화면 3: 전체 조회
+// 앱 시작
 // =====================================================
-function setupViewScreen() {
-  document.getElementById('view-subtitle').textContent = state.projectName || '';
-
-  // 단계 필터 옵션 구성
-  const cfg = LEVEL_CONFIG[state.schoolLevel];
-  const sel = document.getElementById('filter-stage');
-  sel.innerHTML = '<option value="">전체 단계</option>';
-  cfg.stages.forEach(s => {
-    const opt = document.createElement('option');
-    opt.value = s;
-    opt.textContent = s;
-    sel.appendChild(opt);
-  });
-
-  // 필터 초기화
-  sel.value = '';
-  document.getElementById('filter-name').value = '';
-
-  loadAllRecords();
-}
-
-async function loadAllRecords() {
-  hideMsg('msg-view');
-
-  try {
-    let query = supabaseClient
-      .from('project_records')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    // 프로젝트 이름이 있으면 해당 프로젝트 기록만 조회
-    if (state.projectName) {
-      query = query.eq('project_name', state.projectName);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-
-    state.allRecords = data || [];
-    renderRecords(state.allRecords);
-    renderStats(state.allRecords);
-
-  } catch (e) {
-    console.error('기록 조회 실패:', e);
-    showMsg('msg-view', 'Supabase 연결에 실패했습니다. config.js의 URL/Key를 확인해주세요.', 'error');
-  }
-}
-
-function renderRecords(records) {
-  const tbody = document.getElementById('records-tbody');
-  tbody.innerHTML = '';
-
-  if (records.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#bbb;padding:28px;">기록이 없습니다.</td></tr>';
-    return;
-  }
-
-  records.forEach(r => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="white-space:nowrap;">${escapeHtml(r.student_name)}</td>
-      <td>${stageBadge(r.stage)}</td>
-      <td class="cell-truncate" title="${escapeHtml(r.today_work)}">${escapeHtml(r.today_work)}</td>
-      <td class="cell-truncate" title="${escapeHtml(r.difficulty)}">${escapeHtml(r.difficulty)}</td>
-      <td style="white-space:nowrap;font-size:0.77rem;color:#aaa;">${formatDate(r.created_at)}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function renderStats(records) {
-  const cfg = LEVEL_CONFIG[state.schoolLevel];
-  // 각 단계 인덱스 기준 분류 (0=시작, 1=진행, 2=마무리, 3=완료)
-  const counts = [0, 0, 0, 0];
-  records.forEach(r => {
-    const idx = cfg.stages.indexOf(r.stage);
-    if (idx >= 0) counts[idx]++;
-  });
-
-  document.getElementById('stat-total').textContent    = records.length;
-  document.getElementById('stat-done').textContent     = counts[3];
-  document.getElementById('stat-progress').textContent = counts[1] + counts[2];
-  document.getElementById('stat-start').textContent    = counts[0];
-}
-
-// 필터 적용
-function applyFilters() {
-  const stage = document.getElementById('filter-stage').value;
-  const name  = document.getElementById('filter-name').value.trim().toLowerCase();
-
-  let filtered = state.allRecords;
-  if (stage) filtered = filtered.filter(r => r.stage === stage);
-  if (name)  filtered = filtered.filter(r => r.student_name && r.student_name.toLowerCase().includes(name));
-
-  renderRecords(filtered);
-}
-
-document.getElementById('filter-stage').addEventListener('change', applyFilters);
-document.getElementById('filter-name').addEventListener('input', applyFilters);
-
-document.getElementById('btn-refresh').addEventListener('click', loadAllRecords);
-
-document.getElementById('btn-back-from-view').addEventListener('click', () => {
-  showScreen('screen-settings');
-});
+renderHome();
 </script>
 </body>
 </html>
