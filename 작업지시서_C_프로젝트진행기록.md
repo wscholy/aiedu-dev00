@@ -20,7 +20,7 @@
 
 아래 정보를 입력하고 SQL을 생성해 주세요.
 
-- **PROJECT_URL**: [여기에 Supabase Project URL 입력]
+- **PROJECT_URL**:='['text'](../Downloads/작업지시서_A_과학실험관찰.md) [여기에 Supabase Project URL 입력]
 - **ANON_KEY**: [여기에 Supabase anon key 입력]
 
 ### DB 설정 지시
